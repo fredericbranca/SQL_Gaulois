@@ -1,0 +1,10 @@
+SQL Gaulois
+
+A partir du script SQL Gaulois fourni par votre formateur, écrivez et exécutez les requêtes SQL suivantes :
+
+1. Nom des lieux qui finissent par 'um'.
+
+    SELECT *
+    FROM lieu
+    WHERE nom_lieu LIKE '%um'
+
