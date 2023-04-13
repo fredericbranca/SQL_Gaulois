@@ -5,6 +5,21 @@ A partir du script SQL Gaulois fourni par votre formateur, écrivez et exécutez
 1. Nom des lieux qui finissent par 'um'.
 
     SELECT *
-    FROM lieu
-    WHERE nom_lieu LIKE '%um'
+    FROM gaulois.lieu //FROM gaulois.lieu peut-être écrit simplement FROM lieu
+    WHERE nom_lieu LIKE '%um';
 
+2. Nombre de personnages par lieu (trié par nombre de personnages décroissant).
+
+    SELECT gaulois.lieu.id_lieu, gaulois.lieu.nom_lieu, COUNT(gaulois.personnage.id_lieu) AS nombre_personnages
+    FROM gaulois.lieu
+    INNER JOIN gaulois.personnage ON gaulois.lieu.id_lieu = gaulois.personnage.id_lieu //On utilise INNER JOIN plutot que WHERE pour les jointures 
+    GROUP BY gaulois.lieu.id_lieu
+    ORDER BY nombre_personnages DESC;
+
+Simplifié avec des "alias" :
+
+    SELECT l.id_lieu, l.nom_lieu, COUNT(p.id_lieu) as nbPerso
+    FROM lieu l
+    INNER JOIN personnage p ON l.id_lieu = p.id_lieu 
+    GROUP BY l.id_lieu 
+    ORDER BY nbPerso DESC;
