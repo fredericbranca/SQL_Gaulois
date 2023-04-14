@@ -30,7 +30,7 @@ Simplifié avec des "alias" :
     FROM personnage p
     INNER JOIN specialite s ON p.id_specialite = s.id_specialite
     INNER JOIN lieu l ON p.id_lieu = l.id_lieu
-    ORDER BY l.nom_lieu, p.nom_personnage
+    ORDER BY l.nom_lieu, p.nom_personnage;
 
 4. Nom des spécialités avec nombre de personnages par spécialité (trié par nombre de
 personnages décroissant).
@@ -39,7 +39,7 @@ personnages décroissant).
     FROM personnage p
     INNER JOIN specialite s ON p.id_specialite = s.id_specialite
     GROUP BY p.id_specialite
-    ORDER BY nbPerso DESC
+    ORDER BY nbPerso DESC;
 
 5. Nom, date et lieu des batailles, classées de la plus récente à la plus ancienne (dates affichées
 au format jj/mm/aaaa).
@@ -47,4 +47,13 @@ au format jj/mm/aaaa).
     SELECT b.nom_bataille, DATE_FORMAT(b.date_bataille, "%d/%m/%Y") AS dateB, l.nom_lieu
     FROM bataille b
     INNER JOIN lieu l ON b.id_lieu = l.id_lieu
-    ORDER BY dateB ASC
+    ORDER BY dateB ASC;
+
+6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
+
+    SELECT p.nom_potion, SUM(c.qte * i.cout_ingredient) AS coutIngregient
+    FROM ingredient i 
+    INNER JOIN composer c ON c.id_ingredient = i.id_ingredient 
+    INNER JOIN potion p ON c.id_potion = p.id_potion 
+    GROUP BY p.id_potion
+    ORDER BY coutIngregient DESC;
