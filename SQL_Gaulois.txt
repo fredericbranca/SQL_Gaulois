@@ -18,7 +18,7 @@ A partir du script SQL Gaulois fourni par votre formateur, écrivez et exécutez
 
 Simplifié avec des "alias" :
 
-    SELECT l.id_lieu, l.nom_lieu, COUNT(p.id_lieu) as nbPerso
+    SELECT l.id_lieu, l.nom_lieu, COUNT(p.id_lieu) AS nbPerso
     FROM lieu l
     INNER JOIN personnage p ON l.id_lieu = p.id_lieu 
     GROUP BY l.id_lieu 
@@ -31,3 +31,12 @@ Simplifié avec des "alias" :
     INNER JOIN specialite s ON p.id_specialite = s.id_specialite
     INNER JOIN lieu l ON p.id_lieu = l.id_lieu
     ORDER BY l.nom_lieu, p.nom_personnage
+
+4. Nom des spécialités avec nombre de personnages par spécialité (trié par nombre de
+personnages décroissant).
+
+    SELECT s.nom_specialite, COUNT(p.id_specialite) AS nbPerso
+    FROM personnage p
+    INNER JOIN specialite s ON p.id_specialite = s.id_specialite
+    GROUP BY p.id_specialite
+    ORDER BY nbPerso DESC
