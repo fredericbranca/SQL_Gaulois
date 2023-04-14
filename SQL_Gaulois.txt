@@ -51,9 +51,10 @@ au format jj/mm/aaaa).
 
 6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
 
-    SELECT p.nom_potion, SUM(c.qte * i.cout_ingredient) AS coutIngregient
-    FROM ingredient i 
-    INNER JOIN composer c ON c.id_ingredient = i.id_ingredient 
-    INNER JOIN potion p ON c.id_potion = p.id_potion 
-    GROUP BY p.id_potion
-    ORDER BY coutIngregient DESC;
+SELECT p.nom_potion, SUM(c.qte * i.cout_ingredient) AS cout_potion
+FROM potion p
+LEFT JOIN composer c ON c.id_potion = p.id_potion //permet de lister les ingrédients même s'ils ne sont pas présent dans la table jointe 
+LEFT JOIN ingredient i ON c.id_ingredient = i.id_ingredient
+GROUP BY p.id_potion
+ORDER BY cout_potion DESC;
+
