@@ -40,3 +40,11 @@ personnages décroissant).
     INNER JOIN specialite s ON p.id_specialite = s.id_specialite
     GROUP BY p.id_specialite
     ORDER BY nbPerso DESC
+
+5. Nom, date et lieu des batailles, classées de la plus récente à la plus ancienne (dates affichées
+au format jj/mm/aaaa).
+
+    SELECT b.nom_bataille, DATE_FORMAT(b.date_bataille, "%d/%m/%Y") AS dateB, l.nom_lieu
+    FROM bataille b
+    INNER JOIN lieu l ON b.id_lieu = l.id_lieu
+    ORDER BY dateB ASC
