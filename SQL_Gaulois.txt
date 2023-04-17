@@ -157,3 +157,11 @@ gaulois'
     LEFT JOIN boire b ON p.id_personnage = b.id_personnage
     WHERE b.dose_boire IS NULL
     GROUP BY p.id_personnage
+
+15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
+
+    SELECT p.nom_personnage AS "Personnages qui n'ont pas le droit de boire de la potion 'Magique'"
+    FROM personnage p
+    JOIN autoriser_boire ab ON p.id_personnage = ab.id_personnage
+    JOIN potion pot ON ab.id_potion = pot.id_potion
+    WHERE pot.nom_potion = 'Magique'
