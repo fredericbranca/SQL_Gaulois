@@ -200,3 +200,37 @@ D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
             FROM lieu l
             WHERE l.nom_lieu = 'Condate')
     WHERE nom_personnage = 'Zérozérosix';
+
+E. La potion 'Soupe' ne doit plus contenir de persil.
+
+    DELETE FROM composer
+    WHERE id_potion IN (
+        SELECT p.id_potion
+        FROM potion p
+        WHERE p.nom_potion = 'Soupe') 
+    AND id_ingredient IN (
+        SELECT i.id_ingredient
+        FROM ingredient i
+        WHERE i.nom_ingredient = 'Persil' );
+
+Autre solution:
+
+    DELETE FROM composer
+    WHERE (id_potion, id_ingredient) IN (
+        SELECT * 
+        FROM (
+            SELECT p.id_potion, i.id_ingredient
+            FROM potion p
+            JOIN composer c ON p.id_potion = c.id_potion
+            JOIN ingredient i ON i.id_ingredient = c.id_ingredient
+            WHERE p.nom_potion = 'Soupe' AND i.nom_ingredient = 'Persil' 
+        ) AS subquery );
+
+Autre solution (et adopté) :
+
+    DELETE c
+    FROM composer c
+    INNER JOIN potion p ON c.id_potion = p.id_potion
+    INNER JOIN ingredient i ON c.id_ingredient = i.id_ingredient
+    WHERE p.nom_potion = 'Soupe' AND i.nom_ingredient = 'Persil';
+
