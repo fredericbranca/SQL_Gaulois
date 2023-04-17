@@ -190,3 +190,13 @@ C. Supprimez les casques grecs qui n'ont jamais été pris lors d'une bataille.
         FROM casque c
         JOIN type_casque tc ON c.id_type_casque = tc.id_type_casque
         WHERE tc.nom_type_casque = 'Grec' );
+
+D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
+
+    UPDATE personnage
+    SET adresse_personnage = 'Prison',
+        id_lieu = (
+            SELECT l.id_lieu
+            FROM lieu l
+            WHERE l.nom_lieu = 'Condate')
+    WHERE nom_personnage = 'Zérozérosix';
