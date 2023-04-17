@@ -125,7 +125,7 @@ gaulois'
     FROM type_casque tc
     JOIN casque c ON c.id_type_casque = tc.id_type_casque
     GROUP BY tc.id_type_casque
-    ORDER BY nb_casques DESC
+    ORDER BY nb_casques DESC;
 
 12. Nom des potions dont un des ingrédients est le poisson frais.
 
@@ -133,7 +133,7 @@ gaulois'
     FROM potion p
     JOIN composer c ON c.id_potion = p.id_potion
     JOIN ingredient i ON i.id_ingredient = c.id_ingredient
-    WHERE i.nom_ingredient = 'Poisson frais'
+    WHERE i.nom_ingredient = 'Poisson frais';
 
 13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
 
@@ -148,4 +148,12 @@ gaulois'
         FROM HabitantsParLieu )
     SELECT hpl.nom_lieu AS "Lieu avec le plus d'habitant", hpl.nb_habitants AS "Nombre d'habitants"
     FROM HabitantsParLieu hpl
-    JOIN MaxHabitants mh ON hpl.nb_habitants = mh.max_habitants
+    JOIN MaxHabitants mh ON hpl.nb_habitants = mh.max_habitants;
+
+14. Nom des personnages qui n'ont jamais bu aucune potion.
+
+    SELECT p.nom_personnage AS "Personnages qui n'ont jamais bu aucune potion"
+    FROM personnage p
+    LEFT JOIN boire b ON p.id_personnage = b.id_personnage
+    WHERE b.dose_boire IS NULL
+    GROUP BY p.id_personnage
