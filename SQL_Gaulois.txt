@@ -134,3 +134,18 @@ gaulois'
     JOIN composer c ON c.id_potion = p.id_potion
     JOIN ingredient i ON i.id_ingredient = c.id_ingredient
     WHERE i.nom_ingredient = 'Poisson frais'
+
+13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
+
+    WITH HabitantsParLieu AS (
+        SELECT l.nom_lieu, COUNT(p.id_personnage) AS nb_habitants
+        FROM lieu l
+        LEFT JOIN personnage p ON l.id_lieu = p.id_lieu
+        WHERE l.nom_lieu != 'Village gaulois'
+        GROUP by l.id_lieu ),
+    MaxHabitants AS (
+        SELECT MAX(nb_habitants) as max_habitants
+        FROM HabitantsParLieu )
+    SELECT hpl.nom_lieu AS "Lieu avec le plus d'habitant", hpl.nb_habitants AS "Nombre d'habitants"
+    FROM HabitantsParLieu hpl
+    JOIN MaxHabitants mh ON hpl.nb_habitants = mh.max_habitants
