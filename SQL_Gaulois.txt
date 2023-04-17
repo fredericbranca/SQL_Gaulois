@@ -126,3 +126,11 @@ gaulois'
     JOIN casque c ON c.id_type_casque = tc.id_type_casque
     GROUP BY tc.id_type_casque
     ORDER BY nb_casques DESC
+
+12. Nom des potions dont un des ingrédients est le poisson frais.
+
+    SELECT p.nom_potion AS 'Potion qui contient du poisson frais'
+    FROM potion p
+    JOIN composer c ON c.id_potion = p.id_potion
+    JOIN ingredient i ON i.id_ingredient = c.id_ingredient
+    WHERE i.nom_ingredient = 'Poisson frais'
