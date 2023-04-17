@@ -70,20 +70,18 @@ au format jj/mm/aaaa).
 gaulois'
 
     WITH CasquesBataille AS (
-    SELECT p.nom_personnage, SUM(pc.qte) AS total_casques
-    FROM personnage p
-    INNER JOIN prendre_casque pc ON pc.id_personnage = p.id_personnage
-    INNER JOIN bataille b ON b.id_bataille = pc.id_bataille
-    WHERE b.nom_bataille = 'Bataille du village gaulois'
-    GROUP BY p.id_personnage HAVING total_casques
-    ),
+        SELECT p.nom_personnage, SUM(pc.qte) AS total_casques
+        FROM personnage p
+        INNER JOIN prendre_casque pc ON pc.id_personnage = p.id_personnage
+        INNER JOIN bataille b ON b.id_bataille = pc.id_bataille
+        WHERE b.nom_bataille = 'Bataille du village gaulois'
+        GROUP BY p.id_personnage HAVING total_casques ),
     MaxCasques AS (
         SELECT MAX(total_casques) AS max_casques
-        FROM CasquesBataille
-    )
+        FROM CasquesBataille )
     SELECT cb.nom_personnage, cb.total_casques
     FROM CasquesBataille cb
-    JOIN MaxCasques mc ON cb.total_casques = mc.max_casques;
+    JOIN MaxCasques mc ON cb.total_casques = mc.max_casques; //JOIN tout seul équivaut à INNER JOIN qui est le type de jointure par défaut
 
     Autre version :
  
@@ -93,7 +91,7 @@ gaulois'
     INNER JOIN bataille b ON b.id_bataille = pc.id_bataille
     WHERE b.nom_bataille = 'Bataille du village gaulois'
     GROUP BY p.id_personnage HAVING total_casques >= ALL( 
-        SELECT SUM(pc.qte)
+        SELECT MAX(pc.qte)
         FROM prendre_casque pc
         INNER JOIN bataille b ON b.id_bataille = pc.id_bataille
 		WHERE b.nom_bataille = 'Bataille du village gaulois'
@@ -106,3 +104,17 @@ gaulois'
     LEFT JOIN boire b ON b.id_personnage = p.id_personnage
     GROUP BY p.id_personnage
     ORDER BY potion_bue DESC;
+
+10. Nom de la bataille où le nombre de casques pris a été le plus important.
+
+    WITH CasquesBataille AS (
+        SELECT b.nom_bataille, SUM(pc.qte) as total_casques
+        FROM bataille b
+        JOIN prendre_casque pc ON pc.id_bataille = b.id_bataille
+        GROUP BY b.id_bataille ),
+    MaxCasques AS (
+        SELECT MAX(total_casques) AS max_casques
+        FROM CasquesBataille )
+    SELECT cb.nom_bataille, cb.total_casques
+    FROM CasquesBataille cb
+    JOIN MaxCasques mc ON cb.total_casques = mc.max_casques;
