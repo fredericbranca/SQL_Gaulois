@@ -108,7 +108,7 @@ gaulois'
 10. Nom de la bataille où le nombre de casques pris a été le plus important.
 
     WITH CasquesBataille AS (
-        SELECT b.nom_bataille, SUM(pc.qte) as total_casques
+        SELECT b.nom_bataille, SUM(pc.qte) AS total_casques
         FROM bataille b
         JOIN prendre_casque pc ON pc.id_bataille = b.id_bataille
         GROUP BY b.id_bataille ),
@@ -118,3 +118,11 @@ gaulois'
     SELECT cb.nom_bataille, cb.total_casques
     FROM CasquesBataille cb
     JOIN MaxCasques mc ON cb.total_casques = mc.max_casques;
+
+11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par nombre décroissant)
+
+    SELECT tc.nom_type_casque, COUNT(c.nom_casque) AS nb_casques, SUM(c.cout_casque) AS cout_total
+    FROM type_casque tc
+    JOIN casque c ON c.id_type_casque = tc.id_type_casque
+    GROUP BY tc.id_type_casque
+    ORDER BY nb_casques DESC
